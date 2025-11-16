@@ -1,0 +1,16 @@
+{
+    "stylua.targetReleaseVersion": "latest",
+    "stylua.configPath": "stylua.toml",
+    "Lua.diagnostics.globals": [
+        "lib",
+        "loadAnimDict",
+        "loadModel",
+        "Lang",
+        "MySQL",
+        "PolyZone",
+        "CircleZone",
+        "GetConVar",
+        "UE",
+        "Timer"
+    ],
+}

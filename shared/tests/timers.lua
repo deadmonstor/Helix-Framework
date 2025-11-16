@@ -70,7 +70,11 @@ local function run_tests()
 	test_elapsed_time()
 	test_next_tick()
 	test_get_remaining_time()
-	print("All Timer tests passed!")
+	Framework.Debugging:Log("All Timer tests passed!")
 end
 
-run_tests()
+if Framework.ShouldRunTests then
+	do
+		run_tests()
+	end
+end

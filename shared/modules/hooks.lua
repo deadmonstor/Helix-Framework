@@ -16,20 +16,16 @@ end
 local function isfunction(v)
 	return type(v) == "function"
 end
-local function ErrorNoHalt(msg)
-	print(msg)
-end
 local function ErrorNoHaltWithStack(msg)
-	print(debug.traceback(msg))
+	Framework.Debugging:Log(debug.traceback(msg))
 end
+
 local type = type
-local print = print
-local GProtectedCall = ProtectedCall
+local print = Framework.Debugging.Log
+local GProtectedCall = pcall
 local tostring = tostring
 local error = error
 local Hook = {}
-
-local _GLOBAL = _G
 
 local EMPTY_FUNC = function() end
 
@@ -175,7 +171,7 @@ local function new_event(name)
 	return events[name]
 end
 
-function GetTable()
+function Hook.GetTable()
 	local new_table = {}
 	for event_name, event in pairs(events) do
 		local hooks = {}
@@ -193,7 +189,7 @@ function GetTable()
 	return new_table
 end
 
-function Remove(event_name, name)
+function Hook.Remove(event_name, name)
 	if not isstring(event_name) then
 		ErrorNoHaltWithStack("bad argument #1 to 'Remove' (string expected, got " .. type(event_name) .. ")")
 		return
@@ -226,7 +222,7 @@ function Remove(event_name, name)
 	event[name] = nil -- remove the hook from the event table
 end
 
-function Add(event_name, name, func, priority)
+function Hook.Add(event_name, name, func, priority)
 	if not isstring(event_name) then
 		ErrorNoHaltWithStack("bad argument #1 to 'Add' (string expected, got " .. type(event_name) .. ")")
 		return
@@ -249,7 +245,7 @@ function Add(event_name, name, func, priority)
 			if isvalid and isvalid(name) then
 				return real_func(name, ...)
 			end
-			Remove(event_name, name)
+			Hook.Remove(event_name, name)
 		end
 	end
 
@@ -299,7 +295,7 @@ function Add(event_name, name, func, priority)
 				return
 			end
 			-- if priority is different then we consider it a new hook
-			Remove(event_name, name)
+			Hook.Remove(event_name, name)
 		else
 			-- create a new hook list to use, we need to shadow the old one
 			event[0]:CopyPriorityList(priority)
@@ -343,22 +339,15 @@ function Add(event_name, name, func, priority)
 	end
 end
 
-local gamemode_cache
-function Run(name, ...)
-	if not gamemode_cache then
-		gamemode_cache = gmod and gmod.GetGamemode() or nil
-	end
-	return Call(name, gamemode_cache, ...)
+function Hook.Run(name, ...)
+	return Hook.Call(name, nil, ...)
 end
 
-function ProtectedRun(name, ...)
-	if not gamemode_cache then
-		gamemode_cache = gmod and gmod.GetGamemode() or nil
-	end
-	return ProtectedCall(name, gamemode_cache, ...)
+function Hook.ProtectedRun(name, ...)
+	return Hook.ProtectedCall(name, nil, ...)
 end
 
-function Call(event_name, gm, ...)
+function Hook.Call(event_name, gm, ...)
 	local event = events[event_name]
 	if not event then -- fast path
 		if not gm then
@@ -445,7 +434,7 @@ function Call(event_name, gm, ...)
 	return a, b, c, d, e, f
 end
 
-function ProtectedCall(event_name, gm, ...)
+function Hook.ProtectedCall(event_name, gm, ...)
 	local event = events[event_name]
 	if not event then -- fast path
 		if not gm then
@@ -520,7 +509,7 @@ function ProtectedCall(event_name, gm, ...)
 	end
 end
 
-function Debug(event_name)
+function Hook.Debug(event_name)
 	local event = events[event_name]
 	if not event then
 		print("No event with that name")
@@ -560,7 +549,7 @@ local assert = function(istrue, ...)
 end
 local insert = table.insert
 local pcall = pcall
-local Call, Run, Add, Remove = Call, Run, Add, Remove
+local Call, Run, Add, Remove = Hook.Call, Hook.Run, Hook.Add, Hook.Remove
 
 local TEST = {}
 

@@ -1,4 +1,6 @@
+local Framework = require("shared.framework")
 local Debugging = {}
+
 OldPrint = OldPrint or print
 
 local function DebuggingLogInternal(level, ...)

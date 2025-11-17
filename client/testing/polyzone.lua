@@ -1,3 +1,5 @@
+local Framework = require("shared.framework")
+
 eventPrefix = "__PolyZone__:"
 PolyZone = {}
 
@@ -687,37 +689,37 @@ function PolyZone:getBoundingBoxCenter()
 	return self.center
 end
 
-Timer.CreateThread(function()
-	while true do
-		Timer.Wait(1)
+-- Timer.CreateThread(function()
+-- 	while true do
+-- 		Timer.Wait(1)
 
-		if testPoly then
-			testPoly:destroy()
-			testPoly = nil
-		end
+-- 		if testPoly then
+-- 			testPoly:destroy()
+-- 			testPoly = nil
+-- 		end
 
-		local player = Framework.Players:GetList()()
-		if not player then
-			return
-		end
+-- 		local player = Framework.Players:GetList()()
+-- 		if not player then
+-- 			return
+-- 		end
 
-		local location = player:GetPlayerState():GetPawn():K2_GetActorLocation()
+-- 		local location = player:GetPlayerState():GetPawn():K2_GetActorLocation()
 
-		local blah = UE.FVector2D(location.X, location.Y)
+-- 		local blah = UE.FVector2D(location.X, location.Y)
 
-		testPoly = PolyZone:Create({
-			blah + UE.FVector2D(-1000.0, -1000.0),
-			blah + UE.FVector2D(1000.0, -1000.0),
-			blah + UE.FVector2D(1000.0, 1000.0),
-			blah + UE.FVector2D(-1000.0, 1000.0),
-		}, {
-			name = "TestPolyZone",
-			debugPoly = true,
-			debugGrid = false,
-			minZ = location.z + -50.0,
-			maxZ = location.z + 50.0,
-		})
+-- 		testPoly = PolyZone:Create({
+-- 			blah + UE.FVector2D(-1000.0, -1000.0),
+-- 			blah + UE.FVector2D(1000.0, -1000.0),
+-- 			blah + UE.FVector2D(1000.0, 1000.0),
+-- 			blah + UE.FVector2D(-1000.0, 1000.0),
+-- 		}, {
+-- 			name = "TestPolyZone",
+-- 			debugPoly = true,
+-- 			debugGrid = false,
+-- 			minZ = location.z + -50.0,
+-- 			maxZ = location.z + 50.0,
+-- 		})
 
-		testPoly:draw(true)
-	end
-end)
+-- 		testPoly:draw(true)
+-- 	end
+-- end)

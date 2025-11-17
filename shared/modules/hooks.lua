@@ -1,5 +1,6 @@
 -- Testing https://github.com/Srlion/Hook-Library :D
 
+local Framework = require("shared.framework")
 local math = math
 local table = table
 local pairs = pairs
@@ -17,7 +18,7 @@ local function isfunction(v)
 	return type(v) == "function"
 end
 local function ErrorNoHaltWithStack(msg)
-	Framework.Debugging:Log(debug.traceback(msg))
+	error(debug.traceback(msg))
 end
 
 local type = type

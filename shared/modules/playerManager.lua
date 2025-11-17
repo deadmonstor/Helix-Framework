@@ -1,3 +1,5 @@
+local Framework = require("shared.framework")
+
 ---@class PlayerManager
 PlayerManager = {}
 PlayerManager.players = {}

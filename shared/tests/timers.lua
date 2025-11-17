@@ -1,3 +1,5 @@
+local Framework = require("shared.framework")
+
 require("shared.autoloader")
 
 local function dummy() end

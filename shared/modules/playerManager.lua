@@ -2,7 +2,7 @@
 PlayerManager = {}
 PlayerManager.players = {}
 
----@param player table Player object with a valid `id` field.
+---@param player Player object with a valid `id` field.
 ---@return boolean success True if the player was added.
 function PlayerManager:Add(player)
 	if not player then
@@ -41,15 +41,34 @@ function PlayerManager:RemoveByPlayerController(playerController)
 end
 
 ---@param playerId number A valid player identifier.
----@return table|nil player Player object or nil if not found.
+---@return Player? Player object or nil if not found.
 function PlayerManager:Get(playerId)
 	return self.players[playerId]
+end
+
+---@param playerController APlayerController The controller object used to locate the player.
+---@return Player? Player object or nil if not found.
+function PlayerManager:GetByPlayerController(playerController)
+	if not playerController then
+		Framework.Debugging:LogError("Invalid playerController passed to PlayerManager:GetByPlayerController")
+		return nil
+	end
+
+	for id, player in pairs(self.players) do
+		if player:GetController() == playerController then
+			return player
+		end
+	end
+
+	Framework.Debugging:LogWarning("Player not found for given controller.")
+	return nil
 end
 
 ---@return function iterator
 function PlayerManager:GetList()
 	local key, value
 	local players = self.players
+	---@returns Player
 	return function()
 		key, value = next(players, key)
 		return value

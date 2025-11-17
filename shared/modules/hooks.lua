@@ -21,7 +21,9 @@ local function ErrorNoHaltWithStack(msg)
 end
 
 local type = type
-local print = Framework.Debugging.Log
+local print = function(...)
+	Framework.Debugging.Log(...)
+end
 local GProtectedCall = pcall
 local tostring = tostring
 local error = error

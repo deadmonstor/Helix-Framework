@@ -1,3 +1,5 @@
+require("shared.autoloader")
+
 local function dummy() end
 local function intervalDummy() end
 local function threadDummy()

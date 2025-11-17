@@ -1,11 +1,11 @@
 {
     "shared": [
-        "shared/*.lua"
+        "shared/**/*.lua"
     ],
     "server": [
-        "server/*.lua"
+        "server/**/*.lua"
     ],
     "client": [
-        "client/*.lua"
+        "client/**/*.lua"
     ]
 }

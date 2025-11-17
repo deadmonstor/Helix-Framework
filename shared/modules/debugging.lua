@@ -1,6 +1,7 @@
 local Debugging = {}
+OldPrint = OldPrint or print
 
-local function DebuggingLogInternal(level, message)
+local function DebuggingLogInternal(level, ...)
 	local info = debug.getinfo(3, "Sl")
 	local file = info.short_src or "unknown"
 	file = string.match(file, "([^\\/]+)$") or file
@@ -12,34 +13,33 @@ local function DebuggingLogInternal(level, message)
 	local realm = IS_SERVER and "Server" or "Client"
 	local prefix = "[" .. realm .. "][" .. file .. ":" .. line .. "] "
 
-	if type(message) == "table" then
-		local serialized = "{ "
-		for k, v in pairs(message) do
-			serialized = serialized .. tostring(k) .. " = " .. tostring(v) .. ", "
+	local messages = { ... }
+	local serialized = ""
+	for i, msg in ipairs(messages) do
+		serialized = serialized .. tostring(msg)
+		if i < #messages then
+			serialized = serialized .. "\t"
 		end
-		serialized = serialized .. " }"
-		print("[" .. level .. "]" .. prefix .. serialized)
-	else
-		print("[" .. level .. "]" .. prefix .. tostring(message))
 	end
+	OldPrint("[" .. level .. "]" .. prefix .. serialized)
 end
 
-function Debugging:Log(message)
-	DebuggingLogInternal("Info", message)
+function Debugging:Log(...)
+	DebuggingLogInternal("Info", ...)
 end
 
-function Debugging:LogWarning(message)
-	DebuggingLogInternal("Warning", message)
+function Debugging:LogWarning(...)
+	DebuggingLogInternal("Warning", ...)
 end
 
-function Debugging:LogError(message)
-	DebuggingLogInternal("Error", message)
+function Debugging:LogError(...)
+	DebuggingLogInternal("Error", ...)
 end
 
 function Debugging:LogPlayerList()
 	DebuggingLogInternal("Info", "Current Players:")
 	for player in Framework.Players:GetList() do
-		print("\t- " .. tostring(player:GetDebugInfo()))
+		OldPrint("\t- " .. tostring(player:GetDebugInfo()))
 	end
 end
 

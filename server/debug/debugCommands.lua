@@ -11,11 +11,11 @@ local commands = {
 	end,
 }
 
-Framework.Hooks.Add("OnServerAutoloaderInitialized", "DebugCommandsSetup", function(Player)
-	Framework.Hooks.Call("OnDebugCommandsInitialized", nil, commands)
+Framework.Hooks:Add("OnServerAutoloaderInitialized", "DebugCommandsSetup", function(Player)
+	Framework.Hooks:Call("OnDebugCommandsInitialized", commands)
 end)
 
-Framework.Hooks.Add("OnChatMessageSent", "DebugCommands", function(player, message)
+Framework.Hooks:Add("OnChatMessageSent", "DebugCommands", function(player, message)
 	if string.sub(message, 1, 1) ~= "~" then
 		return
 	end

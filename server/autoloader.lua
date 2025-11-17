@@ -30,5 +30,5 @@ end
 Framework.Permissions:RegisterRole("user", userPermissions)
 
 Timer.SetTimeout(function()
-	Framework.Hooks.Call("OnServerAutoloaderInitialized")
+	Framework.Hooks:Call("OnServerAutoloaderInitialized")
 end, 0.1)

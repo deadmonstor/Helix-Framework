@@ -12,6 +12,11 @@
         "GetConVar",
         "UE",
         "Timer",
-        "HWorld"
+        "HWorld",
+        "HPlayer",
+        "RegisterClientEvent"
+    ],
+    "Lua.diagnostics.disable": [
+        "param-type-mismatch"
     ],
 }

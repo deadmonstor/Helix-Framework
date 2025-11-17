@@ -30,7 +30,7 @@ if Framework.ShouldAllowHotReload then
 	end
 end
 
-Framework.Hooks.Add("OnDebugCommandsInitialized", "PlayerManagerSetup", function(commands)
+Framework.Hooks:Add("OnDebugCommandsInitialized", "PlayerManagerSetup", function(commands)
 	if Framework.CurrentEnvironment == Framework.Environment.DEBUG then
 		commands["debug.givemeadmin"] = function(Player, ...)
 			Framework.Permissions:SetRole(Player, "admin")
@@ -40,5 +40,5 @@ Framework.Hooks.Add("OnDebugCommandsInitialized", "PlayerManagerSetup", function
 end)
 
 Timer.SetTimeout(function()
-	Framework.Hooks.Call("OnSharedAutoloaderInitialized")
+	Framework.Hooks:Call("OnSharedAutoloaderInitialized")
 end, 0.1)

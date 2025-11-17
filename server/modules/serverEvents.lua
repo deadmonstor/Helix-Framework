@@ -16,7 +16,7 @@ end
 ---@vararg ... Additional arguments to send with the event.
 ---@return nil
 function ServerEvents.SendToPlayer(player, eventName, ...)
-	Framework.Debugging:Log("Sending event to player [" .. tostring(eventName) .. "] for player [" .. tostring(player and player:GetDebugInfo() or "nil") .. "]")
+	Framework.Debugging:Log("Sending server event to player [" .. tostring(eventName) .. "] for player [" .. tostring(player and player:GetDebugInfo() or "nil") .. "]")
 	local controller = player.GetController and player:GetController() or player
 	TriggerClientEvent(controller, eventName, ...)
 end

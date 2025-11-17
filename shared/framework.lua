@@ -21,7 +21,8 @@ function api.init(options)
 	instance.Players = options.Players or require("shared.modules.playerManager")
 
 	instance.Permissions = options.Permissions or require("shared.modules.permissions")
-	instance.ServerEvents = options.ServerEvents or IS_SERVER and require("shared.modules.serverEvents")
+	instance.ServerEvents = options.ServerEvents or IS_SERVER and require("server.modules.serverEvents")
+	instance.ClientEvents = options.ClientEvents or IS_CLIENT and require("client.modules.clientEvents")
 
 	_instance = instance
 	return _instance

@@ -1,3 +1,4 @@
+local Framework = require("shared.framework")
 local Permissions = {}
 
 ---@type table<string, table<string, boolean>>
@@ -10,6 +11,8 @@ local playerRoles = {}
 ---@param perms table<string, boolean>?
 function Permissions:RegisterRole(roleName, perms)
 	rolePermissions[roleName] = perms or {}
+
+	Framework.Hooks:Call("OnRoleRegistered", roleName, perms)
 end
 
 ---@param player Player
@@ -18,8 +21,11 @@ function Permissions:SetRole(player, roleName)
 	if not player then
 		return
 	end
+
 	local id = player:GetId()
 	playerRoles[id] = roleName
+
+	Framework.Hooks:Call("OnPlayerRoleChanged", player, roleName)
 end
 
 ---@param player Player

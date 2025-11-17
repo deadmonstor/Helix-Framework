@@ -56,7 +56,7 @@ function PlayerManager:GetByPlayerController(playerController)
 		return nil
 	end
 
-	for id, player in pairs(self.players) do
+	for _, player in pairs(self.players) do
 		if player:GetController() == playerController then
 			return player
 		end
@@ -64,6 +64,12 @@ function PlayerManager:GetByPlayerController(playerController)
 
 	Framework.Debugging:LogWarning("Player not found for given controller.")
 	return nil
+end
+
+---Get the local player object this is only valid on the client.
+---@return Player? Local player object or nil if not found.
+function PlayerManager:GetLocalPlayer()
+	return self:GetByPlayerController(HPlayer)
 end
 
 ---@return function iterator

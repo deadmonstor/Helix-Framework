@@ -35,7 +35,7 @@ end
 
 ---@return string
 function Player:GetDebugInfo()
-	return "Player ID: " .. tostring(self:GetId()) .. " | PlayerState: " .. tostring(self:GetPlayerState())
+	return "Player ID: " .. tostring(self:GetId()) -- .. " | PlayerState: " .. tostring(self:GetPlayerState())
 end
 
 return Player

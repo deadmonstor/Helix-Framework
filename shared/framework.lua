@@ -19,6 +19,7 @@ function api.init(options)
 	instance.Debugging = options.Debugging or require("shared.modules.debugging")
 	instance.Hooks = options.Hooks or require("shared.modules.hooks")
 	instance.Players = options.Players or require("shared.modules.playerManager")
+	instance.Characters = options.Characters or require("shared.modules.characterManager")
 
 	instance.Permissions = options.Permissions or require("shared.modules.permissions")
 	_instance = instance

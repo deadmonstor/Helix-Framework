@@ -39,7 +39,7 @@ Framework.Hooks:Add("OnChatMessageSent", "DebugCommands", function(player, messa
 			return
 		end
 
-		commandFunc(player, args)
+		commandFunc(player, table.unpack(args))
 	else
 		Framework.Debugging:Log("Unknown command: " .. tostring(commandName))
 		Framework.ServerEvents.SendToPlayer(player, "ChatMessageReceived", "Server", "Unknown command: " .. commandName)

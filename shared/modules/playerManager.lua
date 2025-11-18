@@ -4,7 +4,7 @@ local Framework = require("shared.framework")
 PlayerManager = {}
 PlayerManager.players = {}
 
----@param player Player object with a valid `id` field.
+---@param player Player
 ---@return boolean success True if the player was added.
 function PlayerManager:Add(player)
 	if not player then

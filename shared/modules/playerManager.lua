@@ -13,10 +13,10 @@ function PlayerManager:Add(player)
 	end
 
 	self.players[player:GetId()] = player
-	Framework.Hooks:Run("OnPlayerAdded", player)
-
 	Framework.Debugging:Log("Player added: " .. tostring(player:GetDebugInfo()))
 	Framework.Debugging:LogPlayerList()
+
+	Framework.Hooks:Run("OnPlayerAdded", player)
 	return true
 end
 

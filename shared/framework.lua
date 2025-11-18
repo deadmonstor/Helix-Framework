@@ -21,11 +21,22 @@ function api.init(options)
 	instance.Players = options.Players or require("shared.modules.playerManager")
 
 	instance.Permissions = options.Permissions or require("shared.modules.permissions")
-	instance.ServerEvents = options.ServerEvents or IS_SERVER and require("server.modules.serverEvents")
-	instance.ClientEvents = options.ClientEvents or IS_CLIENT and require("client.modules.clientEvents")
-
 	_instance = instance
 	return _instance
+end
+
+function api.initrealm(options)
+	if not _instance then
+		error("Framework not initialized. Call Framework.init() first.")
+	end
+
+	_instance.IS_SERVER = options.IS_SERVER or false
+	_instance.IS_CLIENT = options.IS_CLIENT or false
+	_instance.ServerEvents = _instance.IS_SERVER and require("server.modules.serverEvents")
+	_instance.ClientEvents = _instance.IS_CLIENT and require("client.modules.clientEvents")
+
+	_instance.Debugging:Log("Framework initialized in " .. (_instance.IS_SERVER and "Server" or _instance.IS_CLIENT and "Client" or "Unknown") .. " mode.")
+	return api.init(options)
 end
 
 function api.get()

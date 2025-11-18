@@ -12,7 +12,7 @@ local function DebuggingLogInternal(level, ...)
 		file = "unknown" -- Bug: Helix is running files from the wildcard path "..."
 	end
 	local line = info.currentline or 0
-	local realm = IS_SERVER and "Server" or "Client"
+	local realm = Framework.IS_SERVER and "Server" or Framework.IS_CLIENT and "Client" or "Unknown"
 	local prefix = "[" .. realm .. "][" .. file .. ":" .. line .. "] "
 
 	local messages = { ... }

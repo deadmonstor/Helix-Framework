@@ -1,18 +1,19 @@
-IS_CLIENT = true
-
-require("shared.autoloader")
-
 local FrameworkModule = require("shared.framework")
 local Framework = FrameworkModule.get() or FrameworkModule.init({
 	Config = require("shared.config"),
 })
+require("shared.autoloader")
 
 Framework.PolyZones = Framework.PolyZones or require("client.testing.polyzone")
-Framework.ClientEvents = Framework.ClientEvents or require("client.modules.clientEvents")
 
 if Framework._ClientAutoloaderInitialized then
 	return
 end
+
+FrameworkModule.initrealm({
+	IS_SERVER = false,
+	IS_CLIENT = true,
+})
 
 Framework.Debugging:Log("Client autoloader finished loading modules.")
 Framework._ClientAutoloaderInitialized = true

@@ -7,6 +7,9 @@ if Framework._SharedAutoloaderInitialized then
 	return
 end
 
+Framework.IS_CLIENT = false
+Framework.IS_SERVER = false
+
 Framework.Debugging:Log("Autoloader initializing modules...") -- TODO: Investigate bug where this file is being called by "..." which is weird...
 Framework._SharedAutoloaderInitialized = true
 
@@ -23,13 +26,6 @@ RegisterServerEvent("HEvent:PlayerUnloaded", function(source)
 	Framework.Players:RemoveByPlayerController(source)
 end)
 
-if Framework.ShouldAllowHotReload then
-	local Players = UE.UGameplayStatics.GetAllActorsOfClass(HWorld, UE.UClass.Load("/Script/SandboxGame.HPlayerController"))
-	for _, source in pairs(Players or {}) do
-		AddPlayer(source)
-	end
-end
-
 Framework.Hooks:Add("OnDebugCommandsInitialized", "PlayerManagerSetup", function(commands)
 	if Framework.CurrentEnvironment == Framework.Environment.DEBUG then
 		commands["debug.givemeadmin"] = function(Player, ...)
@@ -41,4 +37,11 @@ end)
 
 Timer.SetTimeout(function()
 	Framework.Hooks:Call("OnSharedAutoloaderInitialized")
+
+	if Framework.ShouldAllowHotReload then
+		local Players = UE.UGameplayStatics.GetAllActorsOfClass(HWorld, UE.UClass.Load("/Script/SandboxGame.HPlayerController"))
+		for _, source in pairs(Players or {}) do
+			AddPlayer(source)
+		end
+	end
 end, 0.1)

@@ -1,17 +1,18 @@
-IS_SERVER = true
 local FrameworkModule = require("shared.framework")
-
 require("shared.autoloader")
 
 local Framework = FrameworkModule.get() or FrameworkModule.init({
 	Config = require("shared.config"),
 })
 
-Framework.ServerEvents = Framework.ServerEvents or require("server.modules.serverEvents")
-
 if Framework._ServerAutoloaderInitialized then
 	return
 end
+
+FrameworkModule.initrealm({
+	IS_SERVER = true,
+	IS_CLIENT = false,
+})
 
 Framework.Debugging:Log("Server autoloader initializing modules...")
 Framework._ServerAutoloaderInitialized = true

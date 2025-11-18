@@ -106,29 +106,30 @@ local function GetCachedMaterial(lineComp)
 end
 
 local function GetLineActor(world)
-	for i, actor in ipairs(LineActorPool) do
-		if actor then
-			table.remove(LineActorPool, i)
-			actor:SetActorHiddenInGame(false)
-			return actor
-		end
+	local lineComp = nil
+	for i, currentTable in ipairs(LineActorPool) do
+		local actor = currentTable[1]
+		lineComp = currentTable[2]
+		table.remove(LineActorPool, i)
+		actor:SetActorHiddenInGame(false)
+		return actor, lineComp
 	end
 
-	-- Otherwise spawn a new one
 	local actor = world:SpawnActor(UE.AActor)
 	if actor then
-		local lineComp = actor:AddComponentByClass(UE.UStaticMeshComponent, false, UE.FTransform(), false)
+		lineComp = actor:AddComponentByClass(UE.UStaticMeshComponent, false, UE.FTransform(), false)
 		lineComp:SetMobility(UE.EComponentMobility.Movable)
 		lineComp:SetStaticMesh(GetCachedMesh())
+		print("Creating new line actor " .. #LineActorPool + #ActiveLineActors + 1)
 	end
-	return actor
+	return actor, lineComp
 end
 
 function DrawLine(x1, y1, z1, x2, y2, z2, r, g, b, a, duration, thickness)
-	duration = duration or 0.0001
+	duration = duration or 0.1
 	thickness = thickness or 10
 
-	local world = Framework.Players:GetList()():GetController():GetWorld()
+	local world = HWorld
 	if not world then
 		Framework.Debugging:LogError("No valid world found for DrawLine")
 		return
@@ -169,12 +170,12 @@ function DrawLine(x1, y1, z1, x2, y2, z2, r, g, b, a, duration, thickness)
 
 	Timer.SetTimeout(function()
 		lineActor:SetActorHiddenInGame(true)
-		table.insert(LineActorPool, lineActor)
+		table.insert(LineActorPool, { lineActor, lineComp })
 	end, duration * 1000)
 end
 
 function DrawPoly(v1, v2, v3, r, g, b, a, duration, thickness)
-	duration = duration or 0.0001
+	duration = duration or 0.1
 	thickness = thickness or 5
 
 	DrawLine(v1.X, v1.Y, v1.Z, v2.X, v2.Y, v2.Z, r, g, b, a, duration, thickness)
@@ -689,37 +690,31 @@ function PolyZone:getBoundingBoxCenter()
 	return self.center
 end
 
+-- local player = Framework.Players:GetLocalPlayer()
+-- if not player then
+-- 	return
+-- end
+
+-- local location = player:GetPlayerState():GetPawn():K2_GetActorLocation()
+
+-- local blah = UE.FVector2D(location.X, location.Y)
+
+-- testPoly = PolyZone:Create({
+-- 	blah + UE.FVector2D(-1000.0, -1000.0),
+-- 	blah + UE.FVector2D(1000.0, -1000.0),
+-- 	blah + UE.FVector2D(1000.0, 1000.0),
+-- 	blah + UE.FVector2D(-1000.0, 1000.0),
+-- }, {
+-- 	name = "TestPolyZone",
+-- 	debugPoly = true,
+-- 	debugGrid = false,
+-- 	minZ = location.z + -50.0,
+-- 	maxZ = location.z + 50.0,
+-- })
+
 -- Timer.CreateThread(function()
 -- 	while true do
--- 		Timer.Wait(1)
-
--- 		if testPoly then
--- 			testPoly:destroy()
--- 			testPoly = nil
--- 		end
-
--- 		local player = Framework.Players:GetList()()
--- 		if not player then
--- 			return
--- 		end
-
--- 		local location = player:GetPlayerState():GetPawn():K2_GetActorLocation()
-
--- 		local blah = UE.FVector2D(location.X, location.Y)
-
--- 		testPoly = PolyZone:Create({
--- 			blah + UE.FVector2D(-1000.0, -1000.0),
--- 			blah + UE.FVector2D(1000.0, -1000.0),
--- 			blah + UE.FVector2D(1000.0, 1000.0),
--- 			blah + UE.FVector2D(-1000.0, 1000.0),
--- 		}, {
--- 			name = "TestPolyZone",
--- 			debugPoly = true,
--- 			debugGrid = false,
--- 			minZ = location.z + -50.0,
--- 			maxZ = location.z + 50.0,
--- 		})
-
+-- 		Timer.Wait(10)
 -- 		testPoly:draw(true)
 -- 	end
 -- end)

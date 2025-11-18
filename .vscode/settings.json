@@ -16,7 +16,4 @@
         "HPlayer",
         "RegisterClientEvent"
     ],
-    "Lua.diagnostics.disable": [
-        "param-type-mismatch"
-    ],
 }
